@@ -25,6 +25,6 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: true
           title: "Development Build"
-          automatic_release_tag: 'latest'
+          automatic_release_tag: ${{ github.head_ref }}
           files: releases/*
 

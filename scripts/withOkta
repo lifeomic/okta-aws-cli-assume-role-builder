@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -e
 
-export DIR="$(cd $(dirname ${0}); pwd)"
+export DIR="$(cd $(dirname ${BASH_SOURCE}); pwd)"
 
 LOGGING_PROPS_FILE_NAME="logging.properties"
 OKTA_DIR="${HOME}/.okta"

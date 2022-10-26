@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
-ROOT_DIR="$(cd $(dirname ${0}); pwd)"
-source "${ROOT_DIR}/scripts/shared"
+DIR="$(cd $(dirname ${BASH_SOURCE}); pwd)"
+source "${DIR}/scripts/shared"
 
 ./scripts/compileOkta
 ./scripts/prepOsDirs

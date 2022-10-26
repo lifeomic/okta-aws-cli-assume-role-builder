@@ -10,7 +10,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '19'
       - run: ./prepareReleases
+      - name: Version
+        run: npm version --git-tag-version=false --preid=${{ github.event.issue.number }}-${{ github.event.id }}
+      - name: version
+        id: version
+        run: echo "::set-output name=version::$(uuidgen --time)
+      - name: release
+        uses: softprops/action-gh-release@v1
+        id: createRelease
+        with:
+          draft: false
+          prerelease: false
+          release_name: ${{ steps.version.outputs.version }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Assets
+        id: uploadAssets
+        run: ./uploadReleaseAssets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPLOAD_URL: ${{ steps.createRelease.outputs.upload_url }}

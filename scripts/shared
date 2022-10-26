@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 export SCRIPTS_DIR="$(cd $(dirname ${BASH_SOURCE}); pwd)"
 
 export ROOT_DIR="$(cd "${SCRIPTS_DIR}/.."; pwd)"
@@ -21,11 +23,3 @@ export JAR_DEST="${TMP_DIR}/${JAR_NAME}.jar"
 export DARWIN_M1_DIR="Darwin_arm64"
 export DARWIN_X64_DIR="Darwin_x86_64"
 export LINUX_X64_DIR="Linux_x86_64"
-
-fn () {
-  FILE_TO_FIND="${1}"
-  DIR="$(dirname "${FILE_TO_FIND}")"
-  FILE="$(basename "${FILE_TO_FIND}")"
-  find "${DIR}" -name "${FILE}" -print
-}
-

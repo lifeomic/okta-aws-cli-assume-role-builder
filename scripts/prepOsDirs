@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-set -e
+
+set -euo pipefail
 
 SCRIPTS_DIR="$(cd $(dirname ${0}); pwd)"
 
@@ -30,9 +31,9 @@ downloadJavaOSVersion () {
 
   if [ ! -f "${TMP_DIR}/${TARGET_FILE}" ]; then
     if [ -x "$(command -v wget)" ]; then
-      wget -c "${DOWNLOAD_URL}" -O "${TAR_GZ_DEST}"
+      wget -q -c "${DOWNLOAD_URL}" -O "${TAR_GZ_DEST}"
     else
-      curl -L "${DOWNLOAD_URL}" -o "${TAR_GZ_DEST}"
+      curl -q -L "${DOWNLOAD_URL}" -o "${TAR_GZ_DEST}"
     fi
   fi
   tar -xf "${TAR_GZ_DEST}" -C "${REL_DIR}"

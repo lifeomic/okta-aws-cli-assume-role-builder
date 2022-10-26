@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 SCRIPTS_DIR="$(cd $(dirname ${BASH_SOURCE}); pwd)"
 
@@ -24,4 +24,4 @@ mvn clean
 mvn compile
 mvn package
 
-cp "$(fn "${GIT_DIR}/target/okta-aws-cli*.jar")" "${JAR_DEST}"
+cp "${GIT_DIR}"/target/okta-aws-cli*.jar "${JAR_DEST}"

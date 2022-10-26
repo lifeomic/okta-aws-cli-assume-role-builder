@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
-set -e
+
+set -euo pipefail
 
 export DIR="$(cd $(dirname ${BASH_SOURCE}); pwd)"
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 DIR="$(cd $(dirname ${0}); pwd)"
 source "${DIR}/scripts/shared"

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+SCRIPTS_DIR="$(cd $(dirname ${BASH_SOURCE}); pwd)"
+
+source "${SCRIPTS_DIR}/shared"
+
+GIT_DIR="${TMP_DIR}/${JAR_NAME}"
+
+rm -rf "${JAR_DEST}"
+
+cd "${TMP_DIR}"
+if [ ! -d "${GIT_DIR}" ]; then
+  git clone "https://github.com/oktadev/${JAR_NAME}"
+else
+  cd "${GIT_DIR}"
+  git pull
+fi
+
+cd "${GIT_DIR}"
+
+set -x
+
+mvn clean -q
+mvn compile -q
+mvn package -q
+
+set +x
+
+cp "${GIT_DIR}"/target/okta-aws-cli*.jar "${JAR_DEST}"

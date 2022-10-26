@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+SCRIPTS_DIR="$(cd $(dirname ${0}); pwd)"
+
+source "${SCRIPTS_DIR}/shared"
+
+rm -rf "${RELEASES_DIR}"
+mkdir -p "${RELEASES_DIR}"
+
+macM1="macosx_aarch64"
+macX64="macosx_x64"
+fxLinux="linux_x64"
+
+downloadJavaOSVersion () {
+  DEST_DIR="${1}"
+  OS_ARCH="${2}"
+
+  REL_DIR="${TMP_DIR}/${DEST_DIR}/"
+
+  echo "Setting up ${DEST_DIR} using ${OS_ARCH}"
+  FILE_NAME="zulu${ZULU_VERSION}-ca-fx-jdk${JAVA_VERSION}-${OS_ARCH}"
+  TARGET_FILE="${FILE_NAME}.tar.gz"
+  DOWNLOAD_URL="https://cdn.azul.com/zulu/bin/${TARGET_FILE}"
+  TAR_GZ_DEST="${TMP_DIR}/${TARGET_FILE}"
+  FINAL_TAR_GZ_DEST="${RELEASES_DIR}/${TARGET_FILE}"
+
+  rm -rf "${REL_DIR}"
+
+  mkdir -p "${REL_DIR}"
+
+  set -x
+
+  if [ ! -f "${TMP_DIR}/${TARGET_FILE}" ]; then
+    if [ -x "$(command -v wget)" ]; then
+      wget -q -c "${DOWNLOAD_URL}" -O "${TAR_GZ_DEST}"
+    else
+      curl -q -L "${DOWNLOAD_URL}" -o "${TAR_GZ_DEST}"
+    fi
+  fi
+  tar -xf "${TAR_GZ_DEST}" -C "${REL_DIR}"
+
+  rm -rf "${REL_DIR}/${FILE_NAME}/demo" "${REL_DIR}/${FILE_NAME}/man"
+
+  cd "${REL_DIR}"
+  ln -s "${FILE_NAME}/bin/java" "java"
+
+  cp "${JAR_DEST}" "${REL_DIR}/$(basename "${JAR_DEST}")"
+  cp "${SCRIPTS_DIR}/withOkta" "${REL_DIR}/"
+
+  tar -czf "${RELEASES_DIR}/${DEST_DIR}.tar.gz" -C "${REL_DIR}" .
+  set +x
+}
+
+downloadJavaOSVersion "${DARWIN_M1_DIR}" "${macM1}"
+downloadJavaOSVersion "${DARWIN_X64_DIR}" "${macX64}"
+downloadJavaOSVersion "${LINUX_X64_DIR}" "${fxLinux}"

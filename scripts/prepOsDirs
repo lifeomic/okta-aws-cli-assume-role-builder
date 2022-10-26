@@ -7,6 +7,7 @@ SCRIPTS_DIR="$(cd $(dirname ${0}); pwd)"
 source "${SCRIPTS_DIR}/shared"
 
 rm -rf "${RELEASES_DIR}"
+mkdir -p "${RELEASES_DIR}"
 
 macM1="macosx_aarch64"
 macX64="macosx_x64"
@@ -29,6 +30,8 @@ downloadJavaOSVersion () {
 
   mkdir -p "${REL_DIR}"
 
+  set -x
+
   if [ ! -f "${TMP_DIR}/${TARGET_FILE}" ]; then
     if [ -x "$(command -v wget)" ]; then
       wget -q -c "${DOWNLOAD_URL}" -O "${TAR_GZ_DEST}"
@@ -48,6 +51,7 @@ downloadJavaOSVersion () {
   cp "${SCRIPTS_DIR}/logging.properties" "${REL_DIR}/"
 
   tar -czf "${RELEASES_DIR}/${DEST_DIR}.tar.gz" -C "${REL_DIR}" .
+  set +x
 }
 
 downloadJavaOSVersion "${DARWIN_M1_DIR}" "${macM1}"

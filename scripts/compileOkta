@@ -20,8 +20,12 @@ fi
 
 cd "${GIT_DIR}"
 
-mvn clean
-mvn compile
-mvn package
+set -x
+
+mvn clean -q
+mvn compile -q
+mvn package -q
+
+set +x
 
 cp "${GIT_DIR}"/target/okta-aws-cli*.jar "${JAR_DEST}"

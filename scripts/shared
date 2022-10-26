@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+export SCRIPTS_DIR="$(cd $(dirname ${BASH_SOURCE}); pwd)"
+
+export ROOT_DIR="$(cd "${SCRIPTS_DIR}/.."; pwd)"
+
+export ZULU_VERSION="19.30.11"
+export JAVA_VERSION="19.0.1"
+
+
+
+export RELEASES_DIR="${ROOT_DIR}/releases"
+mkdir -p "${RELEASES_DIR}"
+
+export TMP_DIR="${ROOT_DIR}/tmp"
+mkdir -p "${TMP_DIR}"
+
+export JAR_NAME='okta-aws-cli-assume-role'
+export JAR_DEST="${TMP_DIR}/${JAR_NAME}.jar"
+
+export DARWIN_M1_DIR="Darwin_arm64"
+export DARWIN_X64_DIR="Darwin_x86_64"
+export LINUX_X64_DIR="Linux_x86_64"

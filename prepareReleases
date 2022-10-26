@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+DIR="$(cd $(dirname ${BASH_SOURCE}); pwd)"
+source "${DIR}/scripts/shared"
+
+./scripts/compileOkta
+./scripts/prepOsDirs

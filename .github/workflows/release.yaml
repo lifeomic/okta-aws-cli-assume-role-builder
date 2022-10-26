@@ -14,19 +14,26 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '19'
+      - name: Cache tmp
+        id: cacheTmp
+        uses: actions/cache@v3
+        with:
+          path: tmp
+          key: ${{ runner.os }}
       - run: ./prepareReleases
-      - name: Version
-        run: npm version --git-tag-version=false --preid=${{ github.event.issue.number }}-${{ github.event.id }}
-      - name: version
+      - name: Bump version and push tag
         id: version
-        run: echo "::set-output name=version::$(uuidgen --time)
+        uses: anothrNick/github-tag-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: release
         uses: softprops/action-gh-release@v1
         id: createRelease
         with:
           draft: false
-          prerelease: false
-          release_name: ${{ steps.version.outputs.version }}
+          prerelease: true
+          tag_name: ${{ steps.version.outputs.new_tag }}
+          release_name: ${{ steps.version.outputs.new_tag }}
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload Assets
         id: uploadAssets
@@ -34,3 +41,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           UPLOAD_URL: ${{ steps.createRelease.outputs.upload_url }}
+

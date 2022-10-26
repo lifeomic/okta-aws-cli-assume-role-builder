@@ -48,7 +48,6 @@ downloadJavaOSVersion () {
 
   cp "${JAR_DEST}" "${REL_DIR}/$(basename "${JAR_DEST}")"
   cp "${SCRIPTS_DIR}/withOkta" "${REL_DIR}/"
-  cp "${SCRIPTS_DIR}/logging.properties" "${REL_DIR}/"
 
   tar -czf "${RELEASES_DIR}/${DEST_DIR}.tar.gz" -C "${REL_DIR}" .
   set +x

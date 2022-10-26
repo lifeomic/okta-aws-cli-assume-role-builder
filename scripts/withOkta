@@ -2,19 +2,13 @@
 
 set -euo pipefail
 
-export DIR="$(cd $(dirname ${BASH_SOURCE}); pwd)"
+export DIR="$(cd $(dirname ${0}); pwd)"
 
 LOGGING_PROPS_FILE_NAME="logging.properties"
-OKTA_DIR="${HOME}/.okta"
-LOGGING_PROPS_FILE="${OKTA_DIR}/${LOGGING_PROPS_FILE_NAME}"
-
-if [ ! -f "${LOGGING_PROPS_FILE}" ]; then
-  mkdir -p "${OKTA_DIR}"
-  cat "${DIR}/${LOGGING_PROPS_FILE_NAME}" > "${LOGGING_PROPS_FILE}"
-fi
+LOGGING_PROPS_FILE="${LOGGING_PROPS_FILE:-${HOME}/.okta"/${LOGGING_PROPS_FILE_NAME}"}"
 
 # Copy the input array into a named variable
-ARGS=("$@")
+ARGS=("${@}")
 
 # 1. Expand the array so each argument gets passed on
 # Just using $@ to pass to the next function means spaces
@@ -22,4 +16,4 @@ ARGS=("$@")
 "${DIR}/java" -Djava.util.logging.config.file="${LOGGING_PROPS_FILE}" \
   -classpath "${DIR}/okta-aws-cli-assume-role.jar" \
   com.okta.tools.WithOkta \
-  "${ARGS[@]}"
+  "${ARGS[@]:-true}"
